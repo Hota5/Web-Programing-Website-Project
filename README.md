@@ -1,2 +1,2 @@
 # Web-Programing-Website-Project
-PC pats store website
+Tech pats store website
