@@ -40,7 +40,7 @@ function renderProducts(filteredProducts = products) {
  * Shows first 6 products from the catalog
  */
 function renderFeaturedProducts() {
-    const featured = products.slice(0, 6);
+    const featured = products.filter(p => [1, 3, 5, 7, 9, 10].includes(p.id));
     const grid = document.getElementById('featuredProducts');
     grid.innerHTML = featured.map(product => `
         <div class="col-lg-4 col-md-6">
