@@ -1,0 +1,76 @@
+/* ============================================
+   CSS CUSTOM PROPERTIES (Variables)
+   ============================================ */
+
+/* Root variables for theming */
+:root {
+    --primary-color: #0E6EFF;
+    --light-bg: #f8f9fa;
+    --text-dark: #333;
+    --text-light: #6c757d;
+}
+
+/* Dark theme variable overrides */
+[data-theme="dark"] {
+    --light-bg: #1a1a2e;
+    --text-dark: #eee;
+    --text-light: #aaa;
+    background-color: #0f0f1e;
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+/* Smooth transitions for theme switching */
+* {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Body base styles */
+body {
+    font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    padding-top: 70px; /* Offset for fixed header */
+}
+
+/* ============================================
+   LAYOUT & STRUCTURE
+   ============================================ */
+
+/* Section heading text color */
+.section-heading {
+    color: var(--text-dark);
+}
+
+/* Hide all page sections by default */
+.page-section {
+    display: none;
+}
+
+/* Show only the active page section */
+.page-section.active {
+    display: block;
+}
+
+/* ============================================
+   OVERLAY (for cart sidebar)
+   ============================================ */
+
+/* Semi-transparent overlay behind cart sidebar */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+}
+
+/* Overlay visible state */
+.overlay.active {
+    display: block;
+}

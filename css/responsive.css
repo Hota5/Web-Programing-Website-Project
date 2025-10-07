@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+    /* Adjust header padding for mobile */
+    body {
+        padding-top: 60px;
+    }
+
+    /* Smaller hero text on mobile */
+    .hero-content h1 {
+        font-size: 32px;
+    }
+    
+    /* Full-width cart sidebar on mobile */
+    .cart-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+    
+    /* Hide desktop navigation on mobile */
+    .nav-links {
+        display: none;
+    }
+}

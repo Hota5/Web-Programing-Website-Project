@@ -1,0 +1,320 @@
+/* ============================================
+   PRODUCT DETAIL PAGE
+   ============================================ */
+.product-detail-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.product-detail-content h1,
+.product-detail-content p,
+.product-detail-content .specs-table {
+    color: var(--text-dark);
+}
+
+/* Product specifications table */
+.specs-table {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.specs-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .specs-table td {
+    border-color: #333;
+    color: #eee;
+}
+
+.specs-table td:first-child {
+    font-weight: 600;
+    width: 30%;
+}
+
+/* ============================================
+   ABOUT PAGE
+   ============================================ */
+.about-hero {
+    background: linear-gradient(135deg, #0a1d4d 0%, #1e3a5f 100%);
+    color: white;
+    padding: 60px 0;
+    margin-bottom: 60px;
+    border-radius: 12px;
+}
+
+.about-section {
+    background: #0a1d4d;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    margin-bottom: 30px;
+    color: #eee;
+}
+
+[data-theme="dark"] .about-section {
+    background: #0a1d4d;
+}
+
+.about-section h2,
+.about-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* ============================================
+   CONTACT PAGE
+   ============================================ */
+.contact-section {
+    background: #0a1d4d;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+}
+
+[data-theme="dark"] .contact-section {
+    background: #0a1d4d;
+}
+
+.contact-section label,
+.contact-section h1 {
+    color: #eee;
+}
+
+.contact-section .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-section .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #eee;
+    border-color: var(--primary-color);
+}
+
+.contact-section .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   LOGIN/SIGNUP PAGE
+   ============================================ */
+.login-container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"] .login-container {
+    background: #1a1a2e;
+}
+
+/* Tab buttons for switching between login/signup */
+.form-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.form-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.form-tab.active {
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Form content containers */
+.form-content {
+    display: none;
+}
+
+.form-content.active {
+    display: block;
+}
+
+/* Google sign-in button */
+.btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #3c4043;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-google img {
+    width: 20px;
+    height: 20px;
+}
+
+[data-theme="dark"] .btn-google {
+    background: #1a1a2e;
+    border-color: #333;
+    color: #eee;
+}
+
+[data-theme="dark"] .btn-google:hover {
+    background: #252540;
+}
+
+/* "OR" divider between Google sign-in and email form */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--text-light);
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+
+[data-theme="dark"] .divider::before,
+[data-theme="dark"] .divider::after {
+    border-color: #333;
+}
+
+.divider span {
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ============================================
+   PROFILE PAGE
+   ============================================ */
+.profile-section {
+    background: #0a1d4d;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+}
+
+[data-theme="dark"] .profile-section {
+    background: #0a1d4d;
+}
+
+.profile-section h3 {
+    color: #eee;
+    margin-bottom: 30px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .profile-field {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.profile-field strong {
+    color: #eee;
+}
+
+.profile-field span {
+    color: #eee;
+}
+
+/* ============================================
+   CHECKOUT PAGE
+   ============================================ */
+.checkout-section {
+    background: #0a1d4d;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    margin-bottom: 30px;
+}
+
+[data-theme="dark"] .checkout-section {
+    background: #0a1d4d;
+}
+
+.checkout-section label,
+.checkout-section h3 {
+    color: #eee;
+}
+
+.checkout-section .form-control {
+    background-color: white;
+    color: #333;
+}
+
+[data-theme="dark"] .checkout-section .form-control {
+    background-color: #0f0f1e;
+    color: #eee;
+}
+
+/* Order summary sidebar */
+.order-summary {
+    background: #0a1d4d;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.461);
+}
+
+[data-theme="dark"] .order-summary {
+    background: #0a1d4d;
+}
+
+.order-summary h3,
+.order-summary span,
+.order-summary strong {
+    color: #eee;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+[data-theme="dark"] .order-item {
+    border-color: #333;
+}

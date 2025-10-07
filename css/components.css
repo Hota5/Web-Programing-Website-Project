@@ -1,0 +1,207 @@
+/* ============================================
+   HERO SECTION (Homepage banner)
+   ============================================ */
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1472'); 
+    background-size: cover;     
+    background-position: center; 
+    background-repeat: no-repeat; 
+    color: white;
+    padding: 80px 0;
+    margin-bottom: 60px;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 26px;
+    font-weight: 600;
+    border-radius: 6px;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #0b5ed7;
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* ============================================
+   PRODUCT CARDS
+   ============================================ */
+.product-card {
+    background: #0a1d4d;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    height: 100%;
+    color: #eee;
+}
+
+[data-theme="dark"] .product-card {
+    background: #0a1d4d;
+    box-shadow: 0 3px 20px rgba(0, 0, 0, 0.461);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.product-card p {
+    color: #eee;
+}
+
+.product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: var(--light-bg);
+}
+
+.product-body {
+    padding: 20px;
+}
+
+.product-category {
+    color: var(--primary-color);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #eee;
+}
+
+.product-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   FILTERS SECTION (Shop page)
+   ============================================ */
+.filters-section {
+    background: #0a1d4d;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    margin-bottom: 30px;
+}
+
+[data-theme="dark"] .filters-section {
+    background: #0a1d4d;
+}
+
+.filter-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #eee;
+}
+
+/* ============================================
+   FORM CONTROLS
+   ============================================ */
+.form-select, .form-control {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    color: #333;
+}
+
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .form-control {
+    background-color: #0f0f1e;
+    color: #eee;
+    border-color: #333;
+}
+
+/* ============================================
+   CART SIDEBAR
+   ============================================ */
+.cart-sidebar {
+    position: fixed;
+    right: -400px; /* Hidden off-screen by default */
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+[data-theme="dark"] .cart-sidebar {
+    background: #1a1a2e;
+}
+
+.cart-sidebar.active {
+    right: 0; /* Slide in when active */
+}
+
+.cart-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+[data-theme="dark"] .cart-item {
+    border-color: #333;
+}
+
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* ============================================
+   TEAM CARDS (About page)
+   ============================================ */
+.team-card {
+    background: #0a1d4d;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.461);
+    transition: transform 0.3s;
+    color: #eee;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+}
+
+.team-card i {
+    font-size: 60px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}

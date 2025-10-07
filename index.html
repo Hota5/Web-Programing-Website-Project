@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexTech - Electronics Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <link rel="icon" type="image/png" href="assets/NexTech-Logo.png">
+</head>
+<body>
+    <!-- Start Main Top -->
+    <header class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <a href="#" class="logo" onclick="navigateTo('home')">
+                        <img src="assets/NexTech-Logo.png" alt="NexTech" style="height: 40px;">
+                        NexTech
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <nav class="nav-links text-center">
+                        <a onclick="navigateTo('home')">Home</a>
+                        <a onclick="navigateTo('shop')">Shop</a>
+                        <a onclick="navigateTo('about')">About</a>
+                        <a onclick="navigateTo('contact')">Contact</a>
+                    </nav>
+                </div>
+                <div class="col-md-3">
+                    <div class="header-icons justify-content-end">
+                        <button class="dark-mode-toggle icon-btn" onclick="toggleDarkMode()">
+                            <i class="fas fa-moon"></i> 
+                        </button>
+
+                        <div class="user-dropdown">
+                            <button class="icon-btn" onclick="toggleUserDropdown()">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div class="dropdown-menu-custom" id="userDropdown">
+                                <div id="loggedInMenu" style="display: none;">
+                                    <a class="dropdown-item-custom" onclick="navigateTo('profile')">
+                                        <i class="fas fa-user-circle me-2"></i>My Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item-custom" onclick="logout()">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a>
+                                </div>
+                                <div id="loggedOutMenu">
+                                    <a class="dropdown-item-custom" onclick="navigateTo('login')">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a class="dropdown-item-custom" onclick="navigateTo('login'); showSignup()">
+                                        <i class="fas fa-user-plus me-2"></i>Sign Up
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="icon-btn" onclick="toggleCart()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge-icon" id="cartCount">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Main Top -->
+
+    <!-- Start Cart Overlay -->
+    <div class="overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <!-- End Cart Overlay -->
+
+    <!-- Start Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Shopping Cart</h4>
+                <button class="btn-close" onclick="toggleCart()"></button>
+            </div>
+            <div id="cartItems"></div>
+            <div class="mt-4">
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>Total:</strong>
+                    <strong id="cartTotal">$0.00</strong>
+                </div>
+                <button class="btn btn-primary w-100" onclick="proceedToCheckout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+    <!-- End Cart Sidebar -->
+
+    <!-- Start Home Page -->
+    <div id="homePage" class="page-section active">
+        <!-- Start Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content">
+                            <h1>Premium Electronics at Your Fingertips</h1>
+                            <p>Discover the latest in PC parts, laptops, phones, and audio equipment. Quality products, competitive prices.</p>
+                            <button class="btn btn-primary-custom btn-lg" onclick="navigateTo('shop')">
+                                Shop Now 
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Hero Section -->
+        
+        <div class="container">
+            <!-- Start Featured Categories -->
+            <h2 class="text-center mb-5 section-heading">Featured Categories</h2>
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="product-card text-center" onclick="filterByCategory('pc-parts')">
+                        <div class="p-5">
+                            <i class="fas fa-microchip fa-4x text-primary mb-3"></i>
+                            <h4>PC Parts</h4>
+                            <p>Build your dream PC</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-card text-center" onclick="filterByCategory('laptops')">
+                        <div class="p-5">
+                            <i class="fas fa-laptop fa-4x text-primary mb-3"></i>
+                            <h4>Laptops</h4>
+                            <p>Power on the go</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-card text-center" onclick="filterByCategory('phones')">
+                        <div class="p-5">
+                            <i class="fas fa-mobile-alt fa-4x text-primary mb-3"></i>
+                            <h4>Phones</h4>
+                            <p>Stay connected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Featured Categories -->
+            
+            <!-- Start Featured Products -->
+            <h2 class="text-center mb-5 section-heading">Featured Products</h2>
+            <div class="row g-4" id="featuredProducts"></div>
+            <!-- End Featured Products -->
+        </div>
+    </div>
+    <!-- End Home Page -->
+
+    <!-- Start Shop Page -->
+    <div id="shopPage" class="page-section">
+        <div class="container mt-5">
+            <h1 class="mb-4 section-heading">Shop All Products</h1>
+            
+            <!-- Start Filters Section -->
+            <div class="filters-section">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="filter-title">Category</label>
+                        <select class="form-select" id="categoryFilter" onchange="applyFilters()">
+                            <option value="">All Categories</option>
+                            <option value="pc-parts">PC Parts</option>
+                            <option value="phones">Phones</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="headphones">Headphones</option>
+                            <option value="speakers">Speakers</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="filter-title">Brand</label>
+                        <select class="form-select" id="brandFilter" onchange="applyFilters()">
+                            <option value="">All Brands</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="filter-title">PC Part Type</label>
+                        <select class="form-select" id="partTypeFilter" onchange="applyFilters()">
+                            <option value="">All Types</option>
+                            <option value="cpu">CPU</option>
+                            <option value="gpu">GPU</option>
+                            <option value="ram">RAM</option>
+                            <option value="storage">Storage</option>
+                            <option value="motherboard">Motherboard</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="filter-title">Max Price</label>
+                        <input type="number" class="form-control" id="priceFilter" placeholder="Max price" onchange="applyFilters()">
+                    </div>
+                </div>
+            </div>
+            <!-- End Filters Section -->
+            
+            <!-- Start Product Grid -->
+            <div class="row g-4 mt-3" id="productGrid"></div>
+            <!-- End Product Grid -->
+        </div>
+    </div>
+    <!-- End Shop Page -->
+
+    <!-- Start Product Detail Page -->
+    <div id="productDetailPage" class="page-section">
+        <div class="container mt-5">
+            <button class="btn btn-primary mb-4" onclick="navigateTo('shop')">
+                <i class="fas fa-arrow-left me-2"></i> Back to Shop
+            </button>
+            <div class="row">
+                <div class="col-lg-6">
+                    <img id="detailImage" class="product-detail-img" src="" alt="">
+                </div>
+                <div class="col-lg-6 product-detail-content">
+                    <span class="product-category" id="detailCategory"></span>
+                    <h1 id="detailTitle"></h1>
+                    <p id="detailDescription"></p>
+                    <h2 class="product-price" id="detailPrice"></h2>
+                    <button class="btn btn-primary btn-lg" onclick="addToCartFromDetail()">
+                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                    </button>
+                    
+                    <!-- Start Product Specs Table -->
+                    <table class="specs-table">
+                        <tbody id="detailSpecs"></tbody>
+                    </table>
+                    <!-- End Product Specs Table -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Product Detail Page -->
+
+    <!-- Start About Page -->
+    <div id="aboutPage" class="page-section">
+        <div class="container mt-5">
+            <!-- Start About Hero -->
+            <div class="about-hero text-center">
+                <h1>About NexTech</h1>
+                <p class="lead">Your Trusted Partner in Technology Since 2015</p>
+            </div>
+            <!-- End About Hero -->
+            
+            <!-- Start Our Story Section -->
+            <div class="about-section">
+                <h2>Our Story</h2>
+                <p>Founded in 2015, NexTech started as a small electronics shop in Sarajevo with a simple mission: to make premium technology accessible to everyone. What began with just a handful of products has grown into a comprehensive online marketplace offering the latest in PC components, laptops, smartphones, and audio equipment.</p>
+                <p>We pride ourselves on carefully curating our product selection, ensuring that every item meets our strict quality standards. Our team of tech enthusiasts tests and reviews products before they make it to our catalog, so you can shop with confidence.</p>
+            </div>
+            <!-- End Our Story Section -->
+            
+            <!-- Start Our Mission Section -->
+            <div class="about-section">
+                <h2>Our Mission</h2>
+                <p>At NexTech, we believe technology should empower, not overwhelm. Our mission is to provide our customers with cutting-edge electronics at competitive prices, backed by expert advice and exceptional customer service. Whether you're building your first PC, upgrading your smartphone, or searching for the perfect audio setup, we're here to guide you every step of the way.</p>
+            </div>
+            <!-- End Our Mission Section -->
+            
+            <!-- Start Why Choose Us Section -->
+            <div class="about-section">
+                <h2>Why Choose Us?</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-3">
+                        <h5><i class="fas fa-shield-alt text-primary me-2"></i>Authentic Products</h5>
+                        <p>All products are sourced directly from authorized distributors and manufacturers.</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h5><i class="fas fa-shipping-fast text-primary me-2"></i>Fast Delivery</h5>
+                        <p>Quick and reliable shipping to get your tech to you as soon as possible.</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h5><i class="fas fa-headset text-primary me-2"></i>Expert Support</h5>
+                        <p>Our knowledgeable team is always ready to help with product questions.</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h5><i class="fas fa-undo text-primary me-2"></i>Easy Returns</h5>
+                        <p>30-day hassle-free returns on all products, no questions asked.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- End Why Choose Us Section -->
+            
+            <!-- Start Our Team Section -->
+            <div class="about-section">
+                <h2 class="text-center mb-4">Our Team</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="team-card">
+                            <i class="fas fa-user-tie"></i>
+                            <h4>Amar Kovač</h4>
+                            <p class="text-primary">Founder & CEO</p>
+                            <p>Tech visionary with 15+ years in the industry</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="team-card">
+                            <i class="fas fa-user-cog"></i>
+                            <h4>Selma Hadžić</h4>
+                            <p class="text-primary">Head of Operations</p>
+                            <p>Ensures smooth delivery and customer satisfaction</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="team-card">
+                            <i class="fas fa-user-friends"></i>
+                            <h4>Emir Begić</h4>
+                            <p class="text-primary">Customer Support Lead</p>
+                            <p>Always here to help with your tech needs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Our Team Section -->
+        </div>
+    </div>
+    <!-- End About Page -->
+
+    <!-- Start Contact Page -->
+    <div id="contactPage" class="page-section">
+        <div class="container mt-5">
+            <h1 class="text-center mb-5 section-heading">Contact Us</h1>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- Start Contact Form -->
+                    <div class="contact-section">
+                        <form id="contactForm">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                        </form>
+                    </div>
+                    <!-- End Contact Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Contact Page -->
+
+    <!-- Start Login Page -->
+    <div id="loginPage" class="page-section">
+        <div class="container">
+            <div class="login-container">
+                <!-- Start Form Tabs -->
+                <div class="form-tabs">
+                    <button class="form-tab active" onclick="showLogin()">Login</button>
+                    <button class="form-tab" onclick="showSignup()">Sign Up</button>
+                </div>
+                <!-- End Form Tabs -->
+                
+                <!-- Start Login Form -->
+                <div class="form-content active" id="loginForm">
+                    <h2 class="text-center mb-4">Login to NexTech</h2>
+                    
+                    <!-- Start Google Sign In Button -->
+                    <button type="button" class="btn-google" onclick="handleGoogleSignIn()">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                        <span>Continue with Google</span>
+                    </button>
+                    <!-- End Google Sign In Button -->
+                    
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <form onsubmit="handleLogin(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="loginEmail" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="loginPassword" class="form-control" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Login</button>
+                    </form>
+                </div>
+                <!-- End Login Form -->
+                
+                <!-- Start Signup Form -->
+                <div class="form-content" id="signupForm">
+                    <h2 class="text-center mb-4">Create Account</h2>
+                    
+                    <!-- Start Google Sign In Button -->
+                    <button type="button" class="btn-google" onclick="handleGoogleSignIn()">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                        <span>Sign up with Google</span>
+                    </button>
+                    <!-- End Google Sign In Button -->
+                    
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+                    
+                    <form onsubmit="handleSignup(event)">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="signupFirstName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="signupLastName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="signupEmail" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" id="signupPassword" class="form-control" minlength="6" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" id="signupConfirmPassword" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">Sign Up</button>
+                    </form>
+                </div>
+                <!-- End Signup Form -->
+            </div>
+        </div>
+    </div>
+    <!-- End Login Page -->
+
+    <!-- Start Profile Page -->
+    <div id="profilePage" class="page-section">
+        <div class="container mt-5">
+            <h1 class="mb-4">My Profile</h1>
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Start Profile Section -->
+                    <div class="profile-section">
+                        <h3 class="mb-4">Personal Information</h3>
+                        <div class="profile-info" id="profileInfo"></div>
+                    </div>
+                    <!-- End Profile Section -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Profile Page -->
+
+    <!-- Start Checkout Page -->
+    <div id="checkoutPage" class="page-section">
+        <div class="container mt-5">
+            <h1 class="mb-4">Checkout</h1>
+            <div class="row">
+                <div class="col-lg-7">
+                    <!-- Start Checkout Form -->
+                    <div class="checkout-section">
+                        <h3 class="mb-4">Shipping Information</h3>
+                        <form id="checkoutForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Postal Code</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Country</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            
+                            <!-- Start Payment Information -->
+                            <h3 class="mb-4 mt-5">Payment Information</h3>
+                            <div class="mb-3">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Expiration Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" placeholder="123" required>
+                                </div>
+                            </div>
+                            <!-- End Payment Information -->
+                        </form>
+                    </div>
+                    <!-- End Checkout Form -->
+                </div>
+                <div class="col-lg-5">
+                    <!-- Start Order Summary -->
+                    <div class="order-summary">
+                        <h3 class="mb-4">Order Summary</h3>
+                        <div id="checkoutItems"></div>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="checkoutSubtotal">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span>$10.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax:</span>
+                            <span id="checkoutTax">$0.00</span>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total:</strong>
+                            <strong id="checkoutTotal">$0.00</strong>
+                        </div>
+                        <button type="submit" form="checkoutForm" class="btn btn-primary w-100 btn-lg">
+                            Place Order
+                        </button>
+                    </div>
+                    <!-- End Order Summary -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Checkout Page -->
+
+    <!-- Start Footer  -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>NexTech</h5>
+                    <p>Your trusted source for premium electronics and PC components.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="navigateTo('home')">Home</a></li>
+                        <li><a href="#" onclick="navigateTo('shop')">Shop</a></li>
+                        <li><a href="#" onclick="navigateTo('about')">About</a></li>
+                        <li><a href="#" onclick="navigateTo('contact')">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h5>Contact Info</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone me-2"></i> (+100) 123 456 7890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@nextech.com</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Sarajevo, Bosnia and Herzegovina</li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center pt-2">
+                <p>&copy; 2024 NexTech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer  -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/format.js"></script>
+    
+</body>
+</html>
