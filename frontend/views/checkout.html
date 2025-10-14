@@ -1,0 +1,103 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Checkout</h1>
+    <div class="row">
+        
+        <div class="col-lg-7">
+            <!-- Form -->
+            <div class="checkout-section card-section">
+                <h3 class="mb-4">Shipping Information</h3>
+                <form id="checkoutForm">
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Country</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    
+                    <!-- Payment Information -->
+                    <h3 class="mb-4 mt-5">Payment Information</h3>
+                    <div class="mb-3">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Expiration Date</label>
+                            <input type="text" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-control" placeholder="123" required>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <!-- Order Summary -->
+            <div class="order-summary card-section compact">
+                <h3 class="mb-4">Order Summary</h3>
+                <div id="checkoutItems"></div>
+                <hr class="my-4">
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span id="checkoutSubtotal">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Shipping:</span>
+                    <span>$10.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax:</span>
+                    <span id="checkoutTax">$0.00</span>
+                </div>
+
+                <hr class="my-3">
+                <div class="d-flex justify-content-between mb-4">
+                    <strong>Total:</strong>
+                    <strong id="checkoutTotal">$0.00</strong>
+                </div>
+
+                <button type="submit" form="checkoutForm" class="btn btn-primary w-100 btn-lg">
+                    Place Order
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

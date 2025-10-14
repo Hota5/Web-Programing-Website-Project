@@ -1,19 +1,8 @@
-// ============================================
-// GLOBAL STATE
-// ============================================
-let currentProduct = null; // Stores the product being viewed on detail page
-
-// ============================================
-// PRODUCT GRID RENDERING
-// ============================================
-
-/**
- * Render products in a grid layout
- * Can display all products or a filtered subset
- * @param {Array} filteredProducts - Array of products to display (defaults to all)
- */
+// Display products in grid 
 function renderProducts(filteredProducts = products) {
     const grid = document.getElementById('productGrid');
+    if (!grid) return;
+    
     grid.innerHTML = filteredProducts.map(product => `
         <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="product-card" onclick="viewProduct(${product.id})">
@@ -21,7 +10,7 @@ function renderProducts(filteredProducts = products) {
                 <div class="product-body">
                     <div class="product-category">${product.category.replace('-', ' ')}</div>
                     <h5 class="product-title">${product.name}</h5>
-                    <div class="product-price">$${formatPrice(product.price)}</div>
+                    <div class="product-price">${formatPrice(product.price)}</div>
                     <button class="btn btn-primary w-100" onclick="event.stopPropagation(); addToCart(${product.id})">
                         <i class="fas fa-cart-plus me-2"></i>Add to Cart
                     </button>
@@ -31,145 +20,71 @@ function renderProducts(filteredProducts = products) {
     `).join('');
 }
 
-// ============================================
-// FEATURED PRODUCTS (Homepage)
-// ============================================
 
-/**
- * Render featured products on the homepage
- * Shows first 6 products from the catalog
- */
-function renderFeaturedProducts() {
-    const featured = products.filter(p => [1, 3, 5, 7, 9, 10].includes(p.id));
-    const grid = document.getElementById('featuredProducts');
-    grid.innerHTML = featured.map(product => `
-        <div class="col-lg-4 col-md-6">
-            <div class="product-card" onclick="viewProduct(${product.id})">
-                <img src="${product.image}" class="product-image" alt="${product.name}">
-                <div class="product-body">
-                    <div class="product-category">${product.category.replace('-', ' ')}</div>
-                    <h5 class="product-title">${product.name}</h5>
-                    <div class="product-price">$${formatPrice(product.price)}</div>
-                    <button class="btn btn-primary w-100" onclick="event.stopPropagation(); addToCart(${product.id})">
-                        <i class="fas fa-cart-plus me-2"></i>Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
 
-// ============================================
-// FILTER POPULATION
-// ============================================
 
-/**
- * Populate filter dropdowns with available options
- * Extracts unique brands from product catalog
- */
-function populateFilters() {
-    const brands = [...new Set(products.map(p => p.brand))];
-    const brandFilter = document.getElementById('brandFilter');
-    brandFilter.innerHTML = '<option value="">All Brands</option>' + 
-        brands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
-}
 
-// ============================================
-// FILTER APPLICATION
-// ============================================
-
-/**
- * Apply selected filters to product list
- * Filters by category, brand, part type, and maximum price
- */
+// Product filter
 function applyFilters() {
-    const category = document.getElementById('categoryFilter').value;
-    const brand = document.getElementById('brandFilter').value;
-    const partType = document.getElementById('partTypeFilter').value;
-    const maxPrice = document.getElementById('priceFilter').value;
+    const category = document.getElementById('categoryFilter')?.value;
+    const maxPrice = document.getElementById('priceFilter')?.value;
 
     let filtered = products;
 
-    // Apply category filter
-    if (category) {
-        filtered = filtered.filter(p => p.category === category);
-    }
-    
-    // Apply brand filter
-    if (brand) {
-        filtered = filtered.filter(p => p.brand === brand);
-    }
-    
-    // Apply PC part type filter
-    if (partType) {
-        filtered = filtered.filter(p => p.partType === partType);
-    }
-    
-    // Apply price filter
-    if (maxPrice) {
-        filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
-    }
+    if (category) filtered = filtered.filter(p => p.category === category);
+    if (maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
 
     renderProducts(filtered);
 }
 
-// ============================================
-// CATEGORY QUICK FILTER
-// ============================================
-
-/**
- * Navigate to shop page with category pre-selected
- * Used by category cards on homepage
- * @param {string} category - Category to filter by
- */
-function filterByCategory(category) {
-    document.getElementById('categoryFilter').value = category;
-    navigateTo('shop');
-    setTimeout(() => applyFilters(), 100); // Small delay to ensure page is loaded
+// Navigate to shop with  filter
+function filterByCategory(category = '') {
+    window.location.hash = 'home';
+    setTimeout(() => {
+        const categoryFilter = document.getElementById('categoryFilter');
+        if (categoryFilter && category) {
+            categoryFilter.value = category;
+            applyFilters();
+        }
+            
+        const section = document.getElementById('shopSection');
+        if (section) {
+            const headerOffset = 100;
+            const elementPosition = section.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }, 100);
 }
 
-// ============================================
-// PRODUCT DETAIL PAGE
-// ============================================
 
-/**
- * Display detailed view of a single product
- * Shows full specs and larger image
- * @param {number} id - ID of product to display
- */
+
+
+
+// Navigate to product detail page
 function viewProduct(id) {
     const product = products.find(p => p.id === id);
+    if (!product) {
+        showNotification('Product not found');
+        window.location.hash = 'shop';
+        return;
+    }
+    
     currentProduct = product;
-    
-    // Populate product information
-    document.getElementById('detailImage').src = product.image;
-    document.getElementById('detailCategory').textContent = product.category.replace('-', ' ');
-    document.getElementById('detailTitle').textContent = product.name;
-    document.getElementById('detailDescription').textContent = product.description;
-    document.getElementById('detailPrice').textContent = `$${formatPrice(product.price)}`;
-    
-    // Render specifications table
-    const specsHtml = Object.entries(product.specs).map(([key, value]) => `
-        <tr>
-            <td>${key}</td>
-            <td>${value}</td>
-        </tr>
-    `).join('');
-    document.getElementById('detailSpecs').innerHTML = specsHtml;
-    
-    navigateTo('product');
+    localStorage.setItem('currentProductId', id);
+    window.location.hash = 'product-detail';
 }
 
-// ============================================
-// ADD TO CART FROM DETAIL PAGE
-// ============================================
-
-/**
- * Add currently viewed product to cart
- * Called from product detail page
- */
+// Add product to cart 
 function addToCartFromDetail() {
     if (currentProduct) {
         addToCart(currentProduct.id);
+    } else {
+        const productId = localStorage.getItem('currentProductId');
+        if (productId) addToCart(parseInt(productId));
     }
 }

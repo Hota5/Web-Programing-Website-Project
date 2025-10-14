@@ -1,50 +1,33 @@
-// ============================================
-// GLOBAL STATE
-// ============================================
-let currentUser = null; // Stores the currently logged-in user object
+let currentUser = null;
 
-// ============================================
-// USER INITIALIZATION
-// ============================================
-
-/**
- * Load saved user from localStorage on page load
- * Restores user session if they were previously logged in
- */
+// Load logged in user from storage 
 function loadUser() {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-    }
+    const saved = localStorage.getItem('currentUser');
+    if (saved) currentUser = JSON.parse(saved);
     updateUserMenu();
 }
 
-/**
- * Update the header menu based on login status
- * Shows different menu options for logged in vs logged out users
- */
+// Show/hide menu items based on login status and admin rights
 function updateUserMenu() {
     const loggedInMenu = document.getElementById('loggedInMenu');
     const loggedOutMenu = document.getElementById('loggedOutMenu');
+    const adminNavLink = document.getElementById('adminNavLink');
     
     if (currentUser) {
-        // User is logged in - show profile/logout options
         loggedInMenu.style.display = 'block';
         loggedOutMenu.style.display = 'none';
+        
+        // Show/hide admin nav link
+        const showAdmin = currentUser.isAdmin ? 'inline' : 'none';
+        adminNavLink.style.display = showAdmin;
     } else {
-        // User is logged out - show login/signup options
         loggedInMenu.style.display = 'none';
         loggedOutMenu.style.display = 'block';
+        adminNavLink.style.display = 'none';
     }
 }
 
-// ============================================
-// TAB SWITCHING
-// ============================================
-
-/**
- * Switch to the Login tab in the auth form
- */
+// Switch to login tab
 function showLogin() {
     document.querySelectorAll('.form-tab').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.form-content').forEach(content => content.classList.remove('active'));
@@ -52,9 +35,7 @@ function showLogin() {
     document.getElementById('loginForm').classList.add('active');
 }
 
-/**
- * Switch to the Signup tab in the auth form
- */
+// Switch to signup tab
 function showSignup() {
     document.querySelectorAll('.form-tab').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.form-content').forEach(content => content.classList.remove('active'));
@@ -62,106 +43,86 @@ function showSignup() {
     document.getElementById('signupForm').classList.add('active');
 }
 
-// ============================================
-// LOGIN FUNCTIONALITY
-// ============================================
-
-/**
- * Handle login form submission
- * Validates credentials against stored users in localStorage
- */
-function handleLogin(event) {
-    event.preventDefault();
+// Process login form submission
+function handleLogin(e) {
+    e.preventDefault();
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
-    // Retrieve all registered users from localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // Find matching user
+    if (email === 'admin@gmail.com' && password === 'admin123') {
+        currentUser = { 
+            firstName: 'Admin', 
+            lastName: 'User', 
+            email: email,
+            isAdmin: true 
+        };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        updateUserMenu();
+        window.location.hash = 'admin';
+        return;
+    }
+    
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user = users.find(u => u.email === email && u.password === password);
     
     if (user) {
-        // Login successful - save user session
-        currentUser = { firstName: user.firstName, lastName: user.lastName, email: user.email };
+        currentUser = { 
+            firstName: user.firstName, 
+            lastName: user.lastName, 
+            email: user.email,
+            isAdmin: false 
+        };
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         updateUserMenu();
-        showNotification('Login successful!');
-        navigateTo('home');
+        window.location.hash = 'home';
     } else {
-        // Login failed
         showNotification('Invalid email or password');
     }
 }
 
-// ============================================
-// SIGNUP FUNCTIONALITY
-// ============================================
-
-/**
- * Handle signup form submission
- * Creates new user account and stores in localStorage
- */
-function handleSignup(event) {
-    event.preventDefault();
+// Process signup form submission
+function handleSignup(e) {
+    e.preventDefault();
     const firstName = document.getElementById('signupFirstName').value;
     const lastName = document.getElementById('signupLastName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('signupConfirmPassword').value;
     
-    // Validate password confirmation
+    
+    if (email === 'admin@gmail.com') {
+        showNotification('This email is reserved for admin use');
+        return;
+    }
+    
+    
     if (password !== confirmPassword) {
         showNotification('Passwords do not match!');
         return;
     }
     
-    // Get existing users
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // Check if email already registered
-    if (users.find(u => u.email === email)) {
-        showNotification('Email already registered!');
-        return;
-    }
-    
-    // Create new user
     users.push({ firstName, lastName, email, password });
     localStorage.setItem('users', JSON.stringify(users));
     
-    // Auto-login after signup
-    currentUser = { firstName, lastName, email };
+    
+    currentUser = { firstName, lastName, email, isAdmin: false };
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     updateUserMenu();
-    
-    showNotification('Account created successfully!');
-    navigateTo('home');
+    window.location.hash = 'home';
 }
 
-// ============================================
-// LOGOUT FUNCTIONALITY
-// ============================================
-
-/**
- * Log out current user
- * Clears session and returns to home page
- */
+// Log out current user
 function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
     updateUserMenu();
-    showNotification('Logged out successfully!');
-    navigateTo('home');
+    window.location.hash = 'home';
 }
 
-// ============================================
-// PROFILE PAGE
-// ============================================
-
-/**
- * Render user profile information
- * Displays user's personal details on the profile page
- */
+// Display user profile information
 function renderProfile() {
     if (!currentUser) return;
     
@@ -179,17 +140,16 @@ function renderProfile() {
             <strong>Email:</strong>
             <span>${currentUser.email}</span>
         </div>
+        ${currentUser.isAdmin ? `
+        <div class="profile-field">
+            <strong>Role:</strong>
+            <span class="badge bg-danger">Administrator</span>
+        </div>
+        ` : ''}
     `;
 }
 
-// ============================================
-// GOOGLE SIGN-IN (Placeholder)
-// ============================================
-
-/**
- * Handle Google Sign-In button click
- * TODO: Implement actual Google OAuth when backend is ready
- */
+// Placeholder for future Google Sign-In 
 function handleGoogleSignIn() {
     showNotification('Google Sign-In will be implemented in a future update');
 }

@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="login-container">
+        <!-- Form Tabs -->
+        <div class="form-tabs">
+            <button class="form-tab active" onclick="showLogin()">Login</button>
+            <button class="form-tab" onclick="showSignup()">Sign Up</button>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="form-content active" id="loginForm">
+            <h2 class="text-center mb-4">Login to NexTech</h2>
+            
+            <!-- Google Sign In Button -->
+            <button type="button" class="btn-google" onclick="handleGoogleSignIn()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                <span>Continue with Google</span>
+            </button>
+            
+            <div class="divider">
+                <span>OR</span>
+            </div>
+            
+            <form id="loginFormElement" onsubmit="handleLogin(event)">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-lg">Login</button>
+            </form>
+        </div>
+        
+        
+        <!-- Signup Form -->
+        <div class="form-content" id="signupForm">
+            <h2 class="text-center mb-4">Create Account</h2>
+            
+            <!-- Google Sign In Button -->
+            <button type="button" class="btn-google" onclick="handleGoogleSignIn()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                <span>Sign up with Google</span>
+            </button>
+            
+            <div class="divider">
+                <span>OR</span>
+            </div>
+            
+            <form id="signupFormElement" onsubmit="handleSignup(event)">
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" id="signupFirstName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" id="signupLastName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" minlength="6" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-lg">Sign Up</button>
+            </form>
+        </div>
+        
+    </div>
+</div>

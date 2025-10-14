@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <button class="btn btn-primary mb-4" onclick="window.history.back()">
+        
+        <i class="fas fa-arrow-left me-2"></i> Back 
+    </button>
+    <div class="row">
+        <div class="col-lg-6">
+            <img id="detailImage" class="product-detail-img" src="" alt="">
+        </div>
+        <div class="col-lg-6 product-detail-content">
+            <span class="product-category" id="detailCategory"></span>
+            <h1 id="detailTitle"></h1>
+
+            <p id="detailDescription"></p>
+            <h2 class="product-price" id="detailPrice"></h2>
+            <button class="btn btn-primary btn-lg" onclick="addToCartFromDetail()">
+                <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+            </button>
+        </div>
+
+    </div>
+</div>
