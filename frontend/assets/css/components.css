@@ -1,6 +1,4 @@
-/* ============================================
-   HERO SECTION (Homepage banner)
-   ============================================ */
+/* Hero section*/
 .hero-section {
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1472'); 
@@ -18,15 +16,33 @@
     margin-bottom: 20px;
 }
 
+
 .hero-content p {
     font-size: 18px;
     margin-bottom: 30px;
     opacity: 0.9;
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
+/* Card styling */
+.card-section {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px var(--shadow-color);
+    color: var(--card-text-light);
+}
+
+.card-section h2,
+.card-section h3,
+.card-section label {
+    color: var(--card-text-light);
+}
+
+.card-section.compact {
+    padding: 25px;
+}
+
+/* Buttons*/
 .btn-primary-custom {
     background-color: var(--primary-color);
     border: none;
@@ -42,23 +58,18 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* ============================================
-   PRODUCT CARDS
-   ============================================ */
+
+
+/* Product cards */
 .product-card {
-    background: #0a1d4d;
+    background: var(--card-bg);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    box-shadow: 0 2px 20px var(--shadow-color);
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
     height: 100%;
-    color: #eee;
-}
-
-[data-theme="dark"] .product-card {
-    background: #0a1d4d;
-    box-shadow: 0 3px 20px rgba(0, 0, 0, 0.461);
+    color: var(--card-text-light);
 }
 
 .product-card:hover {
@@ -67,7 +78,7 @@
 }
 
 .product-card p {
-    color: #eee;
+    color: var(--card-text-light);
 }
 
 .product-image {
@@ -93,8 +104,9 @@
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 10px;
-    color: #eee;
+    color: var(--card-text-light);
 }
+
 
 .product-price {
     font-size: 24px;
@@ -103,50 +115,50 @@
     margin-bottom: 15px;
 }
 
-/* ============================================
-   FILTERS SECTION (Shop page)
-   ============================================ */
+/* Filters section  */
 .filters-section {
-    background: #0a1d4d;
+    background: var(--card-bg);
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.461);
+    box-shadow: 0 2px 20px var(--shadow-color);
     margin-bottom: 30px;
-}
-
-[data-theme="dark"] .filters-section {
-    background: #0a1d4d;
 }
 
 .filter-title {
     font-weight: 600;
     margin-bottom: 15px;
-    color: #eee;
+    color: var(--card-text-light);
 }
 
-/* ============================================
-   FORM CONTROLS
-   ============================================ */
-.form-select, .form-control {
+/* Form controls */
+.form-select, 
+.form-control {
     border-radius: 6px;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--border-light);
     background-color: white;
-    color: #333;
+    color: var(--text-dark);
+}
+
+.form-control::placeholder {
+    color: var(--text-dark);
 }
 
 [data-theme="dark"] .form-select,
 [data-theme="dark"] .form-control {
-    background-color: #0f0f1e;
-    color: #eee;
-    border-color: #333;
+    background-color: var(--card-bg);
+    color: var(--card-text-light);
+    border-color: var(--border-dark);
 }
 
-/* ============================================
-   CART SIDEBAR
-   ============================================ */
+[data-theme="dark"] .form-control::placeholder {
+    color: var(--card-text-light);
+}
+
+
+/* Cart sidebar */
 .cart-sidebar {
     position: fixed;
-    right: -400px; /* Hidden off-screen by default */
+    right: -400px;
     top: 0;
     width: 400px;
     height: 100vh;
@@ -158,22 +170,22 @@
 }
 
 [data-theme="dark"] .cart-sidebar {
-    background: #1a1a2e;
+    background: var(--card-bg);
 }
 
 .cart-sidebar.active {
-    right: 0; /* Slide in when active */
+    right: 0;
 }
 
 .cart-item {
     display: flex;
     gap: 15px;
     padding: 15px;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--border-light);
 }
 
 [data-theme="dark"] .cart-item {
-    border-color: #333;
+    border-color: var(--border-dark);
 }
 
 .cart-item-img {
@@ -183,22 +195,22 @@
     border-radius: 8px;
 }
 
-/* ============================================
-   TEAM CARDS (About page)
-   ============================================ */
+
+/* Cards on about page*/
 .team-card {
-    background: #0a1d4d;
+    background: var(--card-bg);
     padding: 30px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.461);
+    box-shadow: 0 2px 15px var(--shadow-color);
     transition: transform 0.3s;
-    color: #eee;
+    color: var(--card-text-light);
 }
 
 .team-card:hover {
     transform: translateY(-5px);
 }
+
 
 .team-card i {
     font-size: 60px;
