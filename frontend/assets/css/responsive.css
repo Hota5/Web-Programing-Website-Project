@@ -14,7 +14,7 @@
         right: -100%;
     }
 
-    /* Header and navigation - Force proper alignment */
+    /* Header and navigation  */
     .top-header .container .row {
         display: flex;
         align-items: center;
@@ -48,7 +48,7 @@
         display: block;
     }
     
-    /* Header icons - ensure horizontal layout */
+    /* Header icons */
     .header-icons {
         display: flex;
         gap: 15px;
