@@ -44,7 +44,7 @@ function showSignup() {
 }
 
 // Process login form submission
-function handleLogin(e) {
+function handleLogin(e) {   
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
@@ -63,7 +63,7 @@ function handleLogin(e) {
         return;
     }
     
-    
+
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user = users.find(u => u.email === email && u.password === password);
     
@@ -85,6 +85,7 @@ function handleLogin(e) {
 // Process signup form submission
 function handleSignup(e) {
     e.preventDefault();
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
     const firstName = document.getElementById('signupFirstName').value;
     const lastName = document.getElementById('signupLastName').value;
     const email = document.getElementById('signupEmail').value;
