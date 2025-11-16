@@ -2,6 +2,7 @@
 require_once __DIR__ . '/BaseDao.php';
 
 class ProductsDao extends BaseDao {
+    
     public function __construct() {
         parent::__construct("products");
     }
@@ -24,6 +25,7 @@ class ProductsDao extends BaseDao {
         
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
+
         return $stmt->fetchAll();
     }
 }
