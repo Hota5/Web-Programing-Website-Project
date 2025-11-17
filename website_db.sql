@@ -32,7 +32,7 @@ CREATE TABLE `cart_items` (
   KEY `cart_items_products_FK` (`product_id`),
   CONSTRAINT `cart_items_products_FK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   CONSTRAINT `user_items_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=143 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,31 @@ CREATE TABLE `cart_items` (
 LOCK TABLES `cart_items` WRITE;
 /*!40000 ALTER TABLE `cart_items` DISABLE KEYS */;
 /*!40000 ALTER TABLE `cart_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contact_messages`
+--
+
+DROP TABLE IF EXISTS `contact_messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `contact_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+LOCK TABLES `contact_messages` WRITE;
+/*!40000 ALTER TABLE `contact_messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contact_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -62,7 +87,7 @@ CREATE TABLE `order_items` (
   KEY `order_items_products_FK` (`product_id`),
   CONSTRAINT `order_items_orders_FK` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_items_products_FK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +116,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`id`),
   KEY `orders_users_FK` (`user_id`),
   CONSTRAINT `orders_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +143,7 @@ CREATE TABLE `products` (
   `category` varchar(20) NOT NULL,
   `img_url` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=247 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +152,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (246,'Laptop','Super duper great',9999.99,'Laptops','laptop.jpg');
+INSERT INTO `products` VALUES (1,'Intel Core i9-13900K','High-performance 24-core processor for gaming and content creation',589.99,'pc-parts','https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=400'),(2,'NVIDIA RTX 4080','Next-gen graphics card with ray tracing and DLSS 3.0',1199.99,'pc-parts','https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400'),(3,'iPhone 15 Pro Max','Latest flagship iPhone with titanium design and A17 Pro chip',1199.99,'phones','https://images.unsplash.com/photo-1709528922641-412eef5ddb48?w=500'),(4,'Samsung Galaxy S24 Ultra','Premium Android phone with S Pen and advanced AI features',1299.99,'phones','https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'),(5,'MacBook Pro 16\'','Professional laptop with M3 Max chip and stunning display',2499.99,'laptops','https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400'),(6,'Dell XPS 15','Premium Windows laptop with 4K OLED display',1899.99,'laptops','https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400'),(7,'Sony WH-1000XM5','Industry-leading noise cancellation with premium sound',399.99,'headphones','https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400'),(8,'AirPods Max','Premium over-ear headphones with spatial audio',549.99,'headphones','https://images.unsplash.com/photo-1628329567705-f8f7150c3cff?w=500'),(9,'Sonos Era 300','Spatial audio speaker with Dolby Atmos support',449.99,'speakers','https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400'),(10,'JBL Charge 5','Portable Bluetooth speaker with powerful bass and waterproof design',179.99,'speakers','https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +178,7 @@ CREATE TABLE `shipping_informations` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `shiping_info_unique` (`order_id`),
   CONSTRAINT `shiping_info_orders_FK` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +205,7 @@ CREATE TABLE `users` (
   `is_admin` tinyint(1) NOT NULL DEFAULT 0,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +214,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (150,'John','Pork','test@gmail.com',0,'password123');
+INSERT INTO `users` VALUES (1,'Admin','Admin','admin@gmail.com',1,'$2y$10$RCFxpro683O9bds2eN36euWHUjB9gvuB.gv.Kc7L7vL4jm6zpAYNO'),(2,'Test','User','test@gmail.com',0,'$2y$10$WAhqH3mMFwW0QzVhK9AHju0FavUGRLlu.q.bcjRBp2J5b5ooS2jEW');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,4 +231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-31 20:15:55
+-- Dump completed on 2025-11-16  3:10:33
