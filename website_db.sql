@@ -202,10 +202,10 @@ CREATE TABLE `users` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `is_admin` tinyint(1) NOT NULL DEFAULT 0,
+  `is_admin` enum('user','admin') NOT NULL DEFAULT 'user',
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +214,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','Admin','admin@gmail.com',1,'$2y$10$RCFxpro683O9bds2eN36euWHUjB9gvuB.gv.Kc7L7vL4jm6zpAYNO'),(2,'Test','User','test@gmail.com',0,'$2y$10$WAhqH3mMFwW0QzVhK9AHju0FavUGRLlu.q.bcjRBp2J5b5ooS2jEW');
+INSERT INTO `users` VALUES (1,'Admin','Admin','admin@gmail.com','admin','0192023a7bbd73250516f069df18b500'),(2,'Test','User','test@gmail.com','user','482c811da5d5b4bc6d497ffa98491e38\r\n');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,4 +231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-16  3:10:33
+-- Dump completed on 2025-11-26  6:49:04

@@ -3,15 +3,13 @@ function renderAdminProducts() {
     const tbody = document.getElementById('adminProductsList');
     if (!tbody) return;
 
-    
-
-    tbody.innerHTML = products.map(product => `
+    tbody.innerHTML = products.map(product => {
+        return `
         <tr>
-            <td><img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;"></td>
+            <td><img src="${product.img_url}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;"></td>
             <td>${product.name}</td>
             <td><span class="badge bg-info">${product.category.replace('-', ' ')}</span></td>
             <td>${formatPrice(product.price)}</td>
-            
             <td>
                 <button class="btn btn-sm btn-primary me-2" onclick="editProduct(${product.id})">
                     <i class="fas fa-edit"></i> Edit
@@ -21,7 +19,8 @@ function renderAdminProducts() {
                 </button>
             </td>
         </tr>
-    `).join('');
+        `;
+    }).join('');
 }
 
 
@@ -35,18 +34,17 @@ function showAddProductModal() {
     new bootstrap.Modal(document.getElementById('productModal')).show();
 }
 
-// Open modal to edit existing product
+// Edit existing product
 function editProduct(id) {
     const product = products.find(p => p.id === id);
     if (!product) return;
 
-    // Fill form with product data
     document.getElementById('productModalTitle').textContent = 'Edit Product';
     document.getElementById('productId').value = product.id;
     document.getElementById('productName').value = product.name;
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productCategory').value = product.category;
-    document.getElementById('productImage').value = product.image;
+    document.getElementById('productImage').value = product.img_url;
     document.getElementById('productDescription').value = product.description;
 
     new bootstrap.Modal(document.getElementById('productModal')).show();
@@ -54,57 +52,87 @@ function editProduct(id) {
 
 // Save new or edited product
 function saveProduct() {
-    
     const id = document.getElementById('productId').value;
     const name = document.getElementById('productName').value.trim();
     const price = parseFloat(document.getElementById('productPrice').value);
     const category = document.getElementById('productCategory').value;
-    const image = document.getElementById('productImage').value.trim();
+    const img_url = document.getElementById('productImage').value.trim();
     const description = document.getElementById('productDescription').value.trim();
 
-    
-    if (!name || !price || !category || !image || !description) {
+    if (!name || !price || !category || !img_url || !description) {
         alert('Please fill in all required fields');
         return;
     }
 
-    const productData = { name, price, category, image, description };
+    const productData = { 
+        name, 
+        price, 
+        category, 
+        img_url,
+        description 
+    };
 
-    
     if (id) {
-        const index = products.findIndex(p => p.id === parseInt(id));
-        if (index !== -1) products[index] = { ...products[index], ...productData };
+        RestClient.put(`products/${id}`, productData,
+            function(response) {
+                bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+                
+                RestClient.get("products", function(data) {
+                    products = data;
+                    renderAdminProducts();
+                    showNotification('Product updated successfully!');
+                }, function(error) {
+                    console.error("Error reloading products:", error);
+                });
+            },
+            function(error) {
+                console.error('Update error:', error);
+                showNotification('Failed to update product');
+            }
+        );
     } else {
-        const newId = Math.max(...products.map(p => p.id)) + 1;
-        products.push({ id: newId, ...productData });
+        RestClient.post('products', productData,
+            function(response) {
+                bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+                
+                RestClient.get("products", function(data) {
+                    products = data;
+                    renderAdminProducts();
+                    showNotification('Product added successfully!');
+                }, function(error) {
+                    console.error("Error reloading products:", error);
+                });
+            },
+            function(error) {
+                console.error('Add error:', error);
+                showNotification('Failed to add product');
+            }
+        );
     }
-
-    
-    localStorage.setItem('products', JSON.stringify(products));
-    bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
-    
-    renderAdminProducts();
-    renderProducts();
 }
 
 // Delete product 
 function deleteProduct(id) {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
-    const index = products.findIndex(p => p.id === id);
-    if (index !== -1) {
-        products.splice(index, 1);
-        localStorage.setItem('products', JSON.stringify(products));
-        
-        
-        
-        
-        renderAdminProducts();
-        renderProducts();
-    }
+    RestClient.delete(`products/${id}`, null,
+        function(response) {
+            RestClient.get("products", function(data) {
+                products = data;
+                renderAdminProducts();
+                showNotification('Product deleted successfully!');
+            }, function(error) {
+                console.error("Error reloading products:", error);
+            });
+        },
+        function(error) {
+            console.error('Delete error:', error);
+            showNotification('Failed to delete product');
+        }
+    );
 }
 
 // Check if current user has admin rights
 function isAdmin() {
-    return currentUser && currentUser.isAdmin === true;
+    return currentUser && currentUser.role === 'admin';
 }

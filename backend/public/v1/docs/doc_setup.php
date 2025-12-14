@@ -18,7 +18,7 @@
 */
 /**
 * @OA\SecurityScheme(
-*     securityScheme="ApiKey",
+*     securityScheme="Authentication",
 *     type="apiKey",
 *     in="header",
 *     name="Authentication"

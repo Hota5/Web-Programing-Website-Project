@@ -18,7 +18,7 @@ function updateUserMenu() {
         loggedOutMenu.style.display = 'none';
         
         // Show/hide admin nav link
-        const showAdmin = currentUser.isAdmin ? 'inline' : 'none';
+        const showAdmin = currentUser.role === 'admin' ? 'inline' : 'none';
         adminNavLink.style.display = showAdmin;
     } else {
         loggedInMenu.style.display = 'none';
@@ -44,75 +44,69 @@ function showSignup() {
 }
 
 // Process login form submission
-function handleLogin(e) {   
+function handleLogin(e) {
     e.preventDefault();
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
-    
-    if (email === 'admin@gmail.com' && password === 'admin123') {
-        currentUser = { 
-            firstName: 'Admin', 
-            lastName: 'User', 
-            email: email,
-            isAdmin: true 
-        };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        updateUserMenu();
-        window.location.hash = 'admin';
-        return;
-    }
-    
-
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        currentUser = { 
-            firstName: user.firstName, 
-            lastName: user.lastName, 
-            email: user.email,
-            isAdmin: false 
-        };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        updateUserMenu();
-        window.location.hash = 'home';
-    } else {
-        showNotification('Invalid email or password');
-    }
+    RestClient.post('auth/login', { email, password }, 
+        function(result) {
+            localStorage.setItem('user_token', result.data.token);
+            const decoded = Utils.parseJwt(result.data.token);
+            currentUser = decoded.user;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateUserMenu();
+            window.location.hash = 'home';
+        },
+        function(error) {
+            showNotification('Login failed');
+        }
+    );
 }
 
 // Process signup form submission
-function handleSignup(e) {
+function handleSignup(e){
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    
     const firstName = document.getElementById('signupFirstName').value;
     const lastName = document.getElementById('signupLastName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('signupConfirmPassword').value;
-    
-    
-    if (email === 'admin@gmail.com') {
-        showNotification('This email is reserved for admin use');
-        return;
-    }
-    
-    
     if (password !== confirmPassword) {
         showNotification('Passwords do not match!');
         return;
     }
-    
-    
-    users.push({ firstName, lastName, email, password });
-    localStorage.setItem('users', JSON.stringify(users));
-    
-    
-    currentUser = { firstName, lastName, email, isAdmin: false };
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    updateUserMenu();
-    window.location.hash = 'home';
+    RestClient.post('auth/register', 
+        { 
+            first_name: firstName, 
+            last_name: lastName, 
+            email, 
+            password 
+        },
+        function(result) {
+            showNotification('Account created successfully!');
+            
+            RestClient.post('auth/login', { email, password },
+                function(loginResult) {
+                    localStorage.setItem('user_token', loginResult.data.token);
+                    const decoded = Utils.parseJwt(loginResult.data.token);
+                    currentUser = decoded.user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateUserMenu();
+                    window.location.hash = 'home';
+                },
+                function(error) {
+                    showLogin();
+                }
+            );
+        },
+        function(error) {
+            const message = error.responseJSON?.error || 'Registration failed';
+            showNotification(message);
+        }
+    );
 }
 
 // Log out current user
@@ -131,17 +125,17 @@ function renderProfile() {
     profileInfo.innerHTML = `
         <div class="profile-field">
             <strong>First Name:</strong>
-            <span>${currentUser.firstName}</span>
+            <span>${currentUser.first_name}</span>
         </div>
         <div class="profile-field">
             <strong>Last Name:</strong>
-            <span>${currentUser.lastName}</span>
+            <span>${currentUser.last_name}</span>
         </div>
         <div class="profile-field">
             <strong>Email:</strong>
             <span>${currentUser.email}</span>
         </div>
-        ${currentUser.isAdmin ? `
+        ${currentUser.role === 'admin' ? `
         <div class="profile-field">
             <strong>Role:</strong>
             <span class="badge bg-danger">Administrator</span>
@@ -150,7 +144,3 @@ function renderProfile() {
     `;
 }
 
-// Placeholder for future Google Sign-In 
-function handleGoogleSignIn() {
-    showNotification('Google Sign-In will be implemented in a future update');
-}
