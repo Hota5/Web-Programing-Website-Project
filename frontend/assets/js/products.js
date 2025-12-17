@@ -1,12 +1,32 @@
-// Display products in grid 
-function renderProducts(filteredProducts = products) {
+// Loads products from database
+function renderProducts(filteredProducts = null) {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
     
-    grid.innerHTML = filteredProducts.map(product => `
+    if (filteredProducts === null) {
+        RestClient.get("products", function(data) {
+            products = data;
+            displayProducts(data);
+            
+        }, function(error) {
+            console.error("Error loading products:", error);
+            showNotification("Failed to load products");
+        });
+        return;
+    }
+    displayProducts(filteredProducts);
+}
+
+// Display products in grid 
+function displayProducts(productList) {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = productList.map(product => {
+        const imageUrl = product.img_url;
+        
+        return `
         <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="product-card" onclick="viewProduct(${product.id})">
-                <img src="${product.image}" class="product-image" alt="${product.name}">
+                <img src="${imageUrl}" class="product-image" alt="${product.name}">
                 <div class="product-body">
                     <div class="product-category">${product.category.replace('-', ' ')}</div>
                     <h5 class="product-title">${product.name}</h5>
@@ -17,11 +37,9 @@ function renderProducts(filteredProducts = products) {
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
-
-
-
 
 
 // Product filter
@@ -63,8 +81,6 @@ function filterByCategory(category = '') {
 
 
 
-
-
 // Navigate to product detail page
 function viewProduct(id) {
     const product = products.find(p => p.id === id);
@@ -81,6 +97,11 @@ function viewProduct(id) {
 
 // Add product to cart 
 function addToCartFromDetail() {
+    if (!currentUser) {
+        showNotification('Please login to add to cart');
+        return;
+    }
+
     if (currentProduct) {
         addToCart(currentProduct.id);
     } else {

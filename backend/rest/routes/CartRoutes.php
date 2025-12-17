@@ -5,6 +5,7 @@
 *     path="/cart/{user_id}",
 *     tags={"cart"},
 *     summary="Get user's cart items",
+*     security={{"Authentication": {}}},
 *     @OA\Parameter(
 *         name="user_id",
 *         in="path",
@@ -19,7 +20,7 @@
 * )
 */
 Flight::route('GET /cart/@user_id', function($user_id) {
-
+    Flight::auth_middleware()->verifyToken(null);
     Flight::json(Flight::cartService()->getCartByUserId($user_id));
 });
 
@@ -28,6 +29,7 @@ Flight::route('GET /cart/@user_id', function($user_id) {
 *     path="/cart",
 *     tags={"cart"},
 *     summary="Add item to cart",
+*     security={{"Authentication": {}}},
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\MediaType(
@@ -46,9 +48,8 @@ Flight::route('GET /cart/@user_id', function($user_id) {
 * )
 */
 Flight::route('POST /cart', function() {
-    
+    Flight::auth_middleware()->verifyToken(null);
     $data = Flight::request()->data->getData();
-
     Flight::cartService()->addToCart($data['user_id'], $data['product_id']);
     Flight::json(['message' => 'Item added to cart']);
 });
@@ -58,6 +59,7 @@ Flight::route('POST /cart', function() {
 *     path="/cart/{id}",
 *     tags={"cart"},
 *     summary="Remove item from cart",
+*     security={{"Authentication": {}}},
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -72,7 +74,7 @@ Flight::route('POST /cart', function() {
 * )
 */
 Flight::route('DELETE /cart/@id', function($id) {
-
+    Flight::auth_middleware()->verifyToken(null);
     Flight::cartService()->removeFromCart($id);
     Flight::json(['message' => 'Items removed from cart']);
 });

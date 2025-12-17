@@ -5,6 +5,7 @@
 *     path="/orders",
 *     tags={"orders"},
 *     summary="Create a new order (checkout)",
+*     security={{"Authentication": {}}},
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\MediaType(
@@ -20,7 +21,7 @@
 *                 @OA\Property(property="city", type="string", example="Sarajevo"),
 *                 @OA\Property(property="state", type="string", example="KS"),
 *                 @OA\Property(property="postal_code", type="string", example="71000"),
-*                 @OA\Property(property="country", type="string", example="Bosnia and Herzegovina"),
+*                 @OA\Property(property="country", type="string", example="Bosnia and Herzegovina")
 *             )
 *         )
 *     ),
@@ -31,15 +32,13 @@
 * )
 */
 Flight::route('POST /orders', function() {
-
+    Flight::auth_middleware()->verifyToken(null);
     $data = Flight::request()->data->getData();
     $result = Flight::orderService()->createOrder($data['user_id'], $data);
-
     if ($result['success']) {
         Flight::json($result);
     } else {
         Flight::halt(400, $result['error']);
     }
 });
-
 ?>

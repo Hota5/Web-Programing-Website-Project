@@ -31,7 +31,7 @@ class OrderService extends BaseService {
         $cartItems = $this->cartDao->getByUserId($user_id);
 
         if (empty($cartItems)) {
-            return ['success' => false, 'error' => 'Cart is emtpy'];  // ← Changed to return array
+            return ['success' => false, 'error' => 'Cart is emtpy'];
         }
 
         $totalPrice = 0;
@@ -65,7 +65,7 @@ class OrderService extends BaseService {
         
         $this->cartDao->clearCart($user_id);
 
-        return ['success' => true, 'message' => 'Order created successfuly'];  // ← Added 'success' key!
+        return ['success' => true, 'message' => 'Order created successfuly'];
     }
 
 

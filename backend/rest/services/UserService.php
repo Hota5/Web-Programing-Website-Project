@@ -2,6 +2,9 @@
 require_once __DIR__ . '/BaseService.php';
 require_once __DIR__ . '/../dao/UsersDao.php';
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 class UserService extends BaseService {
     
     public function __construct() {
@@ -19,8 +22,8 @@ class UserService extends BaseService {
             return ['success' => false, 'error' => 'Pasword must be atleast 8 characters'];
         }
 
-        $data['password'] = md5($data['password']);
-        $data['is_admin'] = isset($data['is_admin']) ? $data['is_admin'] : false; 
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        $data['role'] = isset($data['role']) ? $data['role'] : 'user';
 
         $user_id = $this->create($data);
         return ['success' => true, 'data' => $user_id];
@@ -40,12 +43,25 @@ class UserService extends BaseService {
             return ['success' => false, 'error' => 'Invalid email or pasword'];
         }
 
-        if (md5($password) !== $user['password']) {
+        if (!password_verify($password, $user['password'])) {   
             return ['success' => false, 'error' => 'Invalid email or pasword'];
         }
 
         unset($user['password']);
-        return ['success' => true, 'data' => $user];
+        
+        $jwt_payload = [
+            'user' => $user,
+            'iat' => time(),
+            'exp' => time() + (60 * 60 * 24) 
+        ];
+
+        $token = JWT::encode(
+            $jwt_payload,
+            Config::JWT_SECRET(),
+            'HS256'
+        );
+
+        return ['success' => true, 'data' => array_merge($user, ['token' => $token])];
 
     }
 

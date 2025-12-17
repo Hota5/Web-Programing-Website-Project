@@ -26,10 +26,8 @@
 * )
 */
 Flight::route('GET /products', function() {
-
     $category = Flight::request()->query['category'] ?? null;
     $maxPrice = Flight::request()->query['maxPrice'] ?? null;
-
     Flight::json(Flight::productService()->filterProducts($category, $maxPrice));
 });
 
@@ -52,7 +50,6 @@ Flight::route('GET /products', function() {
 * )
 */
 Flight::route('GET /products/@id', function($id) {
-
     Flight::json(Flight::productService()->getById($id));
 });
 
@@ -61,6 +58,7 @@ Flight::route('GET /products/@id', function($id) {
 *     path="/products",
 *     tags={"products"},
 *     summary="Create a new product",
+*     security={{"Authentication": {}}},
 *     @OA\RequestBody(
 *         required=true,
 *         @OA\MediaType(
@@ -82,10 +80,11 @@ Flight::route('GET /products/@id', function($id) {
 * )
 */
 Flight::route('POST /products', function() {
-
+    Flight::auth_middleware()->verifyToken(null);
+    Flight::auth_middleware()->authorizeRole('admin');
+    
     $data = Flight::request()->data->getData();
     $result = Flight::productService()->createProduct($data);
-
     if ($result['success']) {
         Flight::json(['message' => 'Product created successfully', 'data' => $result['data']]);
     } else {
@@ -98,6 +97,7 @@ Flight::route('POST /products', function() {
 *     path="/products/{id}",
 *     tags={"products"},
 *     summary="Update a product",
+*     security={{"Authentication": {}}},
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -125,10 +125,11 @@ Flight::route('POST /products', function() {
 * )
 */
 Flight::route('PUT /products/@id', function($id) {
-
+    Flight::auth_middleware()->verifyToken(null);
+    Flight::auth_middleware()->authorizeRole('admin');
+    
     $data = Flight::request()->data->getData();
     $result = Flight::productService()->updateProduct($id, $data);
-
     if($result['success']) {
         Flight::json(['message' => 'Product updated successfully']);
     } else {
@@ -141,6 +142,7 @@ Flight::route('PUT /products/@id', function($id) {
 *     path="/products/{id}",
 *     tags={"products"},
 *     summary="Delete a product",
+*     security={{"Authentication": {}}},
 *     @OA\Parameter(
 *         name="id",
 *         in="path",
@@ -155,7 +157,9 @@ Flight::route('PUT /products/@id', function($id) {
 * )
 */
 Flight::route('DELETE /products/@id', function($id) {
-
+    Flight::auth_middleware()->verifyToken(null);
+    Flight::auth_middleware()->authorizeRole('admin');
+    
     Flight::productService()->delete($id);
     Flight::json(['message' => 'Product deleted successfully']);
 });

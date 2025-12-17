@@ -2,43 +2,61 @@ let cart = [];
 
 // Load cart from localStorage 
 function loadCart() {
-    const saved = localStorage.getItem('cart');
-    if (saved) {
-        try {
-            cart = JSON.parse(saved);
-        } catch (e) {
-            cart = [];
-        }
+    const token = localStorage.getItem('user_token');
+    if (!token) {
+        cart = [];
+        updateCart();
+        return;
     }
+    const decoded = Utils.parseJwt(token);
+    const userId = decoded.user.id;
+
+    RestClient.get(`cart/${userId}`, 
+        function(data) {
+            cart = data; 
+            updateCart();
+        },
+        function(error) {
+            console.error("Load cart error:", error);
+            cart = [];
+            updateCart();
+        }
+    );
 }
 
-// Save cart to localStorage
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
 
 // Add product to cart 
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    
-    const existing = cart.find(item => item.id === productId);
-    
-    if (existing) {
-        existing.quantity++;
-    } else {
-        cart.push({ ...product, quantity: 1 });
+function addToCart(productId){
+    if (!currentUser) {
+        showNotification('Please login to add to cart');
+        return;
     }
-    
-    saveCart();
-    updateCart();
+    const token = localStorage.getItem('user_token');
+    const decoded = Utils.parseJwt(token);
+    const userId = decoded.user.id;
+
+    RestClient.post('cart', { user_id: userId, product_id: productId }, 
+        function(response) {
+            loadCart();
+        },
+        function(error) {
+            console.error("Add to cart error:", error);
+            showNotification('Failed to add to cart');
+        }
+    );
 }
 
 // Remove product from cart 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    saveCart();
-    updateCart();
+function removeFromCart(cartItemId) {
+    RestClient.delete(`cart/${cartItemId}`, null,
+        function(response) {
+            loadCart();
+        },
+        function(error) {
+            console.error("Remove from cart error:", error);
+            showNotification('Failed to remove from cart');
+        }
+    );
 }
 
 // Update cart 
@@ -64,16 +82,16 @@ function updateCart() {
     
     
     cartItems.innerHTML = cart.map(item => `
-        <div class="cart-item">
-            <img src="${item.image}" class="cart-item-img" alt="${item.name}">
-            <div class="flex-grow-1">
-                <h6>${item.name}</h6>
-                <p class="mb-0">${formatPrice(item.price)} x ${item.quantity}</p>
-            </div>
-            <button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">
-                <i class="fas fa-trash"></i>
-            </button>
+    <div class="cart-item">
+        <img src="${item.image || item.img_url}" class="cart-item-img" alt="${item.name}">
+        <div class="flex-grow-1">
+            <h6>${item.name}</h6>
+            <p class="mb-0">${formatPrice(item.price)} x ${item.quantity}</p>
         </div>
+        <button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
     `).join('');
     
     
@@ -136,7 +154,21 @@ function renderCheckout() {
 
 // Empty cart after ordering
 function clearCart() {
-    cart = [];
-    saveCart();
-    updateCart();
+    const token = localStorage.getItem('user_token');
+    if (!token) {
+        cart = [];
+        updateCart();
+        return;
+    }
+    const decoded = Utils.parseJwt(token);
+    const userId = decoded.user.id;
+    RestClient.get(`cart/${userId}`, 
+        function(cartData) {
+            cartData.forEach(item => {
+                RestClient.delete(`cart/${item.id}`, null, function(){}, function(){});
+            });
+            cart = [];
+            updateCart();
+        }
+    );
 }

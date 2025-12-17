@@ -1,19 +1,32 @@
 <?php
 require_once __DIR__ . '/../config.php';
 
-
 class BaseDao {
    protected $table;
    protected $connection;
 
 
-   public function __construct($table) {
+    public function __construct($table) {
        $this->table = $table;
-       $this->connection = Database::connect();
-   }
+
+        try {
+            $this->connection = new PDO(
+                "mysql:host=" . Config::DB_HOST() . ";dbname=" . Config::DB_NAME() . ";port=" . Config::DB_PORT(),
+                Config::DB_USER(),
+                Config::DB_PASSWORD(),
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
+
+            );
+        } catch (PDOException $e) {
+            die("Connection failed: " . $e->getMessage());
+        }
+    }
 
 
-   public function getAll() {
+    public function getAll() {
        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table);
        $stmt->execute();
        
@@ -21,7 +34,7 @@ class BaseDao {
    }
 
 
-   public function getById($id) {
+    public function getById($id) {
        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
        $stmt->bindParam(':id', $id);
        $stmt->execute();
@@ -30,7 +43,7 @@ class BaseDao {
    }
 
 
-   public function insert($data) {
+    public function insert($data) {
        $columns = implode(", ", array_keys($data));
        $placeholders = ":" . implode(", :", array_keys($data));
        $sql = "INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders)";
@@ -41,7 +54,7 @@ class BaseDao {
    }
 
 
-   public function update($id, $data) {
+    public function update($id, $data) {
 
        $fields = "";
 
@@ -58,7 +71,7 @@ class BaseDao {
    }
 
 
-   public function delete($id) {
+    public function delete($id) {
        $stmt = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = :id");
        $stmt->bindParam(':id', $id);
 

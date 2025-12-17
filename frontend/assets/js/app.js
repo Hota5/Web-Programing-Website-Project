@@ -48,7 +48,6 @@ document.addEventListener('click', function(e) {
 
 // Initialize app when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initializeProducts();  
     loadTheme();           
     loadUser();            
     loadCart();            
@@ -71,8 +70,21 @@ function ContactForm() {
     
     form.onsubmit = function(e) {
         e.preventDefault();
-        showNotification('Message sent successfully!');
-        form.reset();
+        const formData = new FormData(form);
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            message: formData.get('message')
+        };
+        RestClient.post('contact', data,
+            function(response) {
+                showNotification('Message sent successfully!');
+                form.reset();
+            },
+            function(error) {
+                showNotification('Failed to send message');
+            }
+        );
     };
 }
 
@@ -96,23 +108,60 @@ function ProfilePage() {
 
 // Checkout page 
 function CheckoutPage() {
+    if (!currentUser) {
+        showNotification('Please login to checkout');   
+        window.location.hash = 'login'; 
+        return;
+    }
+    
     if (cart.length === 0) {
-        window.location.hash = 'shop';
+        showNotification('Your cart is empty');
+        window.location.hash = 'home';
         return;
     }
     
     renderCheckout();
     
-    
-    const form = document.getElementById('checkoutForm');
-    if (!form) return;
-    
-    form.onsubmit = function(e) {
-        e.preventDefault();
-        showNotification('Order placed successfully!');
-        clearCart();
-        window.location.hash = 'home';
-    };
+    setTimeout(function() {
+        const form = document.getElementById('checkoutForm');
+        if (!form) return;
+        
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('user_token');
+            const decoded = Utils.parseJwt(token);
+            const userId = decoded.user.id;
+            
+            const formData = new FormData(form);
+            const orderData = {
+                user_id: userId,
+                first_name: formData.get('first_name'),
+                last_name: formData.get('last_name'),
+                email: formData.get('email'),
+                phone_number: formData.get('phone_number'),
+                address: formData.get('address'),
+                city: formData.get('city'),
+                postal_code: formData.get('postal_code'),
+                country: formData.get('country')
+            };
+            
+            console.log('Order Data:', orderData);
+            
+            RestClient.post('orders', orderData,
+                function(response) {
+                    showNotification('Order placed successfully!');
+                    clearCart();
+                    window.location.hash = 'home';
+                },
+                function(error) {
+                    console.error('Checkout error:', error);
+                    console.error('Response text:', error.responseText);
+                    showNotification('Failed to place order. Please try again.');
+                }
+            );
+        };
+    }, 100);
 }
 
 // Admin page 
@@ -121,7 +170,14 @@ function AdminPage() {
         window.location.hash = 'home';
         return;
     }
-    renderAdminProducts();
+    
+    RestClient.get("products", function(data) {
+        products = data;
+        renderAdminProducts();
+    }, function(error) {
+        console.error("Error loading products:", error);
+        showNotification("Failed to load products");
+    });
 }
 
 // Product detail page 
@@ -141,20 +197,11 @@ function ProductDetail() {
     currentProduct = product;
     
     
-    document.getElementById('detailImage').src = product.image;
+    document.getElementById('detailImage').src = product.img_url;
     document.getElementById('detailCategory').textContent = product.category.replace('-', ' ');
     document.getElementById('detailTitle').textContent = product.name;
     document.getElementById('detailDescription').textContent = product.description;
     document.getElementById('detailPrice').textContent = `${formatPrice(product.price)}`;
-    
-    
-    const specsHtml = Object.entries(product.specs).map(([key, value]) => `
-        <tr>
-            <td>${key}</td>
-            <td>${value}</td>
-        </tr>
-    `).join('');
-    document.getElementById('detailSpecs').innerHTML = specsHtml;
 }
 
 // Toggle mobile navigation menu
